@@ -1,7 +1,7 @@
 {
   "name": "client",
   "version": "1.0.0",
-  "description": "",
+  "description": "��#\u0000 \u0000F\u0000l\u0000i\u0000x\u0000I\u0000t\u0000U\u0000p\u0000C\u0000l\u0000i\u0000e\u0000n\u0000t\u0000\r\u0000 \u0000",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
@@ -22,5 +22,13 @@
     "passport": "^0.5.2",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BriWins/FlixItUpClient.git"
+  },
+  "bugs": {
+    "url": "https://github.com/BriWins/FlixItUpClient/issues"
+  },
+  "homepage": "https://github.com/BriWins/FlixItUpClient#readme"
 }
