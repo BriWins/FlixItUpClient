@@ -2,8 +2,8 @@
 
 const mongoose = require("mongoose");
 const Models = require("./models.js");
-const Movies = Models.movies;
-const Users = Models.users;
+const Movies = Models.Movie;
+const Users = Models.User;
 const express = require("express");
 const cors = require("cors");
 const app = express();
@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true,}));
 app.use(bodyParser.json());
 app.use(methodOverride());
 
-// let allowedOrigins = ["`http://localhost:5500`", "http://testsite.com", "http://localhost:1234", "http://localhost:4200"];
+let allowedOrigins = ["`http://localhost:5500`", "http://testsite.com", "http://localhost:1234", "http://localhost:4200"];
 
 // app.options('*', cors()) //enable preflight requests
 
