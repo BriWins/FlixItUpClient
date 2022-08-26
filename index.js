@@ -26,7 +26,7 @@ app.use(methodOverride());
 
 let allowedOrigins = ["`http://localhost:5500`", "http://testsite.com", "http://localhost:1234", "http://localhost:4200"];
 
-// app.options('*', cors()) //enable preflight requests
+app.options('*', cors()) //enable preflight requests
 
 app.use(cors({
   origin: (origin, callback) => {
