@@ -7,6 +7,13 @@ let Users = Models.User,
   JWTStrategy = passportJWT.Strategy,
   ExtractJWT = passportJWT.ExtractJwt;
 
+/**
+ * checks for username and validates password
+ * @param {string} username
+ * @param {string} password
+ * @default
+ */
+
 passport.use(new LocalStrategy({
   usernameField: 'Username',
   passwordField: 'Password'
@@ -27,6 +34,12 @@ passport.use(new LocalStrategy({
     return callback(null, users);
   });
 }));
+
+/**
+ * validate bearer token
+ * @param {string} jwtPayload
+ * @param callback
+ */
 
 passport.use(new JWTStrategy({
   jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
