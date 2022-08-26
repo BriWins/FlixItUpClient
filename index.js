@@ -1,5 +1,3 @@
-//---------------------------------------Middleware/Packages-------------------------------------------------------
-
 const mongoose = require("mongoose");
 const Models = require("./models.js");
 const Movies = Models.Movie;
@@ -44,23 +42,34 @@ let auth = require('./auth')(app);
 const passport = require('passport');
 require('./passport');
 
-//---------------------------------------API URL's and Functions-------------------------------------------------------
-
-//function returns a homepage
+/**
+ * redirects root to index.html
+ * @param {express.request} req
+ * @param {express.response} res
+ */
 
 app.get("/", (req,res) => {
   res.send("Welcome to the My Flix App!!!")
 });
 
-
-// function returns myFlixDB instructions for developer use
+/**
+ * redirects /documentation to documentation.html
+ * @param {express.request} req
+ * @param {express.response} res
+ */
 
 app.get("/documentation", (req, res) => {
   res.sendFile("Public/documentation.html", { root: __dirname });
 });
 
-
-//function allows a new user to register
+/**
+ * /users endpoint
+ * method: post
+ * register user profile
+ * expects Username, Password, Email, Birthdate, Favorites
+ * @param {express.request} req
+ * @param {express.response} res
+ */
 
 app.post("/users/register", 
  [
@@ -104,7 +113,13 @@ let hashPassword = Users.hashPassword(req.body.Password);
 });
 
 
-//function allows user to add movies to favorites list
+/**
+ * /users/:Username/movies/:MovieID endpoint
+ * method: post
+ * add MovieID to user favorites
+ * @param {express.request} req
+ * @param {express.response} res
+ */
 
 app.post("/users/:Username/movies/:MovieID", passport.authenticate("jwt", { session: false }), (req, res) => {
   Users.findOneAndUpdate({ Username: req.params.Username }, 
@@ -122,8 +137,13 @@ app.post("/users/:Username/movies/:MovieID", passport.authenticate("jwt", { sess
     });
 });
 
-
-//function returns list of all movies
+/**
+ * /movies endpoint
+ * method: get
+ * get all movies and populates
+ * @param {express.request} req
+ * @param {express.response} res
+ */
 
 app.get("/movies", passport.authenticate("jwt", { session: false }), (req, res) => {
   Movies.find()
@@ -137,7 +157,13 @@ app.get("/movies", passport.authenticate("jwt", { session: false }), (req, res) 
 });
 
 
-//function locates a single user by username
+/**
+ * /users/:Username endpoint
+ * method: get
+ * user profile
+ * @param {express.request} req
+ * @param {express.response} res
+ */
 
 app.get("/users/:Username", passport.authenticate("jwt", { session: false }), (req,res) => {
   Users.findOne({ Username: req.params.Username })
@@ -151,7 +177,12 @@ app.get("/users/:Username", passport.authenticate("jwt", { session: false }), (r
 });
 
 
-//function allow user to locate movie by Title
+/**
+ * /movies/:titles endpoint
+ * get: movie by title and populates
+ * @param {express.request} req
+ * @param {express.response} res
+ */
 
 app.get("/movies/:titles",  passport.authenticate("jwt", { session: false }), (req, res) => {
   Movies.findOne({ Title: req.params.titles })
@@ -165,7 +196,13 @@ app.get("/movies/:titles",  passport.authenticate("jwt", { session: false }), (r
 });
 
 
-// function filters list of movies by genre and displays the movie data
+/**
+ * movies/genres/:genres endpoint
+ * method: get
+ * all genres
+ * @param {express.request} req
+ * @param {express.response} res
+ */
 
 app.get("/movies/genres/:genres", passport.authenticate("jwt", { session: false }), (req, res) => {
   Movies.find({ "Genre.Name" : req.params.genres })
@@ -179,7 +216,13 @@ app.get("/movies/genres/:genres", passport.authenticate("jwt", { session: false 
 });
 
 
-//functions returns data about a director (bio, birth year, death year) by name
+/**
+ * movies/directors/:names endpoint
+ * method: get
+ * director by name
+ * @param {express.request} req
+ * @param {express.response} res
+ */
 
 app.get("/movies/directors/:names", passport.authenticate("jwt", { session: false }), (req, res) => {
   Movies.findOne({ "Director.Name": req.params.names })
@@ -196,7 +239,14 @@ app.get("/movies/directors/:names", passport.authenticate("jwt", { session: fals
 });
 
 
-//function allows user to update their account
+/**
+ * /users/ endpoint
+ * method: put
+ * update user profile
+ * expects Username, Password, Email, Birthdate, Favorites
+ * @param {express.request} req
+ * @param {express.response} res
+ */
 
 app.put("/users/:Username",  passport.authenticate("jwt", { session: false }),  (req, res) => {
   Users.findOneAndUpdate({ Username: req.params.Username },
@@ -221,7 +271,13 @@ app.put("/users/:Username",  passport.authenticate("jwt", { session: false }),  
 });
 
 
-//function allows user to remove a movie from favorite list
+/**
+ * /users/:Username/movies/:MovieID endpoint
+ * method post
+ * remove MovieID from user favorites
+ * @param {express.request} req
+ * @param {express.response} res
+ */
 
 app.delete("/users/:Username/movies/:MovieID", passport.authenticate("jwt", { session: false }), (req, res) => {
   Users.findOneAndUpdate({ Username: req.params.Username }, 
@@ -240,7 +296,13 @@ app.delete("/users/:Username/movies/:MovieID", passport.authenticate("jwt", { se
 });
 
 
-//allows user to delete their account
+/**
+ * /users endpoint
+ * method: delete
+ * delete user profile
+ * @param {express.request} req
+ * @param {express.response} res
+ */
 
 app.delete("/users/unregister/:Username", passport.authenticate("jwt", { session: false }), (req, res) => {
   Users.findOneAndRemove({ Username: req.params.Username })
@@ -260,7 +322,13 @@ app.delete("/users/unregister/:Username", passport.authenticate("jwt", { session
 //---------------------------------------Catching Errors-------------------------------------------------------
 
 
-//function to log all errors
+/**
+ * catches uncaught errors
+ * @param {express.error} err
+ * @param {express.request} req
+ * @param {express.response} res
+ * @param {express.NextFunction} next
+ */
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -268,7 +336,7 @@ app.use((err, req, res, next) => {
 });
 
 
-//---------------------------------------Port Connection-------------------------------------------------------
+
 const port = process.env.PORT || 5500;
 app.listen(port, "0.0.0.0", () => {
   console.log("Listening on Port " + port);
