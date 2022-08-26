@@ -3,7 +3,10 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
-/* ---------------------------Movie Schema-------------------------------- */
+/**
+ * movieSchema schema
+ * @class movie
+ */
 
 let movieSchema = mongoose.Schema({
     Title: { type: String, required: true},
@@ -12,10 +15,18 @@ let movieSchema = mongoose.Schema({
     ImgPath: String,
     Rating: String,
     ReleaseDate: Date,
+/**
+ * Genre schema
+ * @class genre
+ */
     Genre: {
         Name: String,
         Description: String
     },
+/**
+ * Director schema
+ * @class director
+ */
     Director: {
         Name: String,
         Biography: String,
@@ -26,7 +37,12 @@ let movieSchema = mongoose.Schema({
     Actors: [String]
 });
 
-/* ---------------------------User Schema-------------------------------- */
+/**
+ * userSchema schema
+ * @class user
+ * @mixes {userSchema.methods.validatePassword}
+ * @mixes {userSchema.statics.hashedPassword}
+ */
 
 let userSchema = mongoose.Schema({
     Username: String,
@@ -36,17 +52,28 @@ let userSchema = mongoose.Schema({
     Favorites: [{type: String, ref: "Movie"}]
 });
 
-//---------------------------Hashing Passwords-------------------------------- 
+/**
+ * hashes user password
+ * @mixin
+ * @param {string} password 
+ * @default
+ */
 
 userSchema.statics.hashPassword = (password) => {
     return bcrypt.hashSync(password, 10);
 };
 
+/**
+ * validates user password
+ * @mixin
+ * @param {string} password
+ * @default
+ */
+
 userSchema.methods.validatePassword = function(password) {
     return bcrypt.compareSync(password, this.Password);
 };
 
-/* ---------------------------Exportation-------------------------------- */
 
 let Movie = mongoose.model("Movie", movieSchema);
 let User = mongoose.model("User", userSchema);
